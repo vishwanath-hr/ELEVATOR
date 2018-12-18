@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Elevator</h2>
+<div data-ng-app="ElevatorApp">
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-bordered" data-ng-controller="ElevatorCtrl" data-ng-init="loadFloors()">
+                <thead>
+                    <tr>
+                        <th>Floor</th>
+                        <th>No. People</th>
+                        <th>Floor togo</th>
+                        <th>Elevator 1</th>
+                        <th>Elevator 2</th>
+                        <th>Elevator 3</th>
+                        
+                    </tr>
+                </thead>
+                <tbody data-ng-repeat="floor in floors">
+                    <tr class="{{floor.CurrentFloor}}">
+                        <td>
+                            <span>{{floor.CurrentFloor}}</span>
+                        </td>
+                        <td>
+                            <input type="text" style="width:100px" ng-model="floor.TotalPeople" ng-change="validate($index)" />
+                            <span>{{errorMessage[$index]}}</span>
+                        </td>
+                        <td>
+                            <select ng-options="x for x in floorList" ng-model="floor.DestinationFloor" ng-change="validateSameFloor($index)" >
+                            </select>
+                            <button type="button" class="btn btn-default" ng-click="run($index)">Go</button>    
+                        </td>
+                        <td class="1" style="border:solid">
+                            <span class="1">{{floor.ElevatorA ? floor.ElevatorA.TotalPeople : ''}}</span>
+                            <img class="1" alt="direction" src="/content/images/{{(floor.ElevatorA ? floor.ElevatorA.Direction : 'blank')}}.gif" />
+                        </td>
+                        <td class="2" style="border:solid">
+                            <span class="2">{{floor.ElevatorB ? floor.ElevatorB.TotalPeople : ''}}</span>
+                            <img class="2" alt="direction" src="/content/images/{{(floor.ElevatorB ? floor.ElevatorB.Direction : 'blank')}}.gif" />
+                        </td>
+                        <td class="3" style="border:solid">
+                            <span class="4">{{floor.ElevatorC ? floor.ElevatorC.TotalPeople : ''}}</span>
+                            <img class="4" alt="direction" src="/content/images/{{(floor.ElevatorC ? floor.ElevatorC.Direction : 'blank')}}.gif" />
+                        </td>
+                       
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+</div>
+
+@section Scripts {
+    
+    @Scripts.Render("~/bundles/jqueryui")
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Scripts/angular-animate.min.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/jquery.signalR-2.2.0.min.js" ></script>
+    <script type="text/javascript" src="~/Scripts/el.hub.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            LoadHub();
+        });
+    </script>
+
+    @Scripts.Render("~/bundles/floor")
+}
